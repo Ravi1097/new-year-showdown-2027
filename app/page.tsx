@@ -129,33 +129,46 @@ export default function Home() {
     return () => window.clearInterval(timer);
   }, [room?.question?.startedAt]);
 
-  async function sendHostLogin() {
-    if (!email.trim()) {
-      setMessage("Enter your email address first.");
-      return;
-    }
 
-    setLoading(true);
-    setMessage("");
+async function sendHostLogin() {
+  const cleanEmail = email.trim();
 
+  if (!cleanEmail) {
+    setMessage("Please enter your email address.");
+    return;
+  }
+
+  setLoading(true);
+  setMessage("");
+  setEmailSent(false);
+
+  try {
     const { error } = await supabase.auth.signInWithOtp({
-      email: email.trim(),
+      email: cleanEmail,
       options: {
-        emailRedirectTo: "https://ubiquitous-space-invention-p6wxvjr6jgp36jjg-3000.app.github.dev/",
+        emailRedirectTo:
+          "https://new-year-showdown-2027-qbatgpig0-ravi-s4.vercel.app/",
         shouldCreateUser: true
       }
     });
 
-    setLoading(false);
-
     if (error) {
-      setMessage(error.message);
+      setMessage(`Login error: ${error.message}`);
       return;
     }
 
     setEmailSent(true);
-    setMessage("Magic link sent. Open your email and sign in on this device.");
+    setMessage("Magic link sent. Check your email.");
+  } catch (err) {
+    setMessage(
+      err instanceof Error
+        ? `Login failed: ${err.message}`
+        : "Login failed. Please try again."
+    );
+  } finally {
+    setLoading(false);
   }
+}
 
   async function createRoom() {
     if (!session || session.user.is_anonymous) {
