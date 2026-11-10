@@ -163,8 +163,7 @@ async function sendHostLogin() {
     const { error } = await supabase.auth.signInWithOtp({
       email: cleanEmail,
       options: {
-        emailRedirectTo:
-          "https://new-year-showdown-2027-qbatgpig0-ravi-s4.vercel.app/",
+        emailRedirectTo: "https://new-year-showdown-2027.vercel.app/",
         shouldCreateUser: true
       }
     });
