@@ -54,6 +54,7 @@ type RoomState = {
   submittedCount: number;
   myAnswer: string | null;
   serverNow: string;
+  myAnswerCorrect?: boolean | null;
 };
 
 export default function Home() {
