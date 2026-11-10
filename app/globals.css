@@ -1,26 +1,197 @@
+
 @import "tailwindcss";
+
+:root {
+  --showdown-bg: #080817;
+  --showdown-navy: #111126;
+  --showdown-burgundy: #351020;
+  --showdown-gold: #fbbf24;
+  --showdown-gold-light: #fde68a;
+}
 
 * {
   box-sizing: border-box;
 }
 
-html,
-body {
+html {
   min-height: 100%;
-  margin: 0;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: #080817;
-  color: white;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 50% -15%, rgba(120, 53, 15, 0.32), transparent 48%),
+    radial-gradient(ellipse at 0% 70%, rgba(88, 28, 55, 0.17), transparent 45%),
+    var(--showdown-bg);
+  color: #fff;
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
 }
 
 button {
   cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    opacity 180ms ease;
+}
+
+button:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+input {
+  color: white;
+}
+
+input::placeholder {
+  color: #85859c;
+}
+
+input:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--showdown-gold);
+  outline-offset: 3px;
 }
 
 ::selection {
-  background: #fbbf24;
-  color: #080817;
+  background: var(--showdown-gold);
+  color: var(--showdown-bg);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--showdown-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #51405b;
+  border-radius: 20px;
+}
+
+@keyframes goldGlow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(251, 191, 36, 0.32);
+  }
+}
+
+@keyframes showdownEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gold-glow {
+  animation: goldGlow 3s ease-in-out infinite;
+}
+
+.showdown-entrance {
+  animation: showdownEntrance 650ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* PREMIUM SHOWDOWN INTERFACE */
+
+main {
+  position: relative;
+  isolation: isolate;
+}
+
+main > div.relative {
+  animation: showdownEntrance 700ms ease-out both;
+  position: relative;
+  z-index: 1;
+}
+
+main header {
+  border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+  padding-bottom: 22px;
+}
+
+main header h1 {
+  letter-spacing: -0.04em;
+  text-shadow: 0 3px 24px rgba(251, 191, 36, 0.12);
+}
+
+main section {
+  backdrop-filter: blur(16px);
+  transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+
+main section.rounded-3xl {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.075),
+    rgba(255, 255, 255, 0.025)
+  );
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+main section.rounded-2xl {
+  background: linear-gradient(
+    145deg,
+    rgba(28, 25, 48, 0.92),
+    rgba(12, 12, 29, 0.94)
+  );
+}
+
+main section h2 {
+  letter-spacing: -0.025em;
+}
+
+main button:not(:disabled) {
+  position: relative;
+}
+
+main button:disabled {
+  filter: saturate(0.7);
+}
+
+main input {
+  background-color: rgba(5, 5, 20, 0.65);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+main input:focus {
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
+}
+
+@media (min-width: 768px) {
+  main {
+    padding-top: 48px;
+    padding-bottom: 60px;
+  }
 }
