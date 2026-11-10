@@ -71,17 +71,34 @@ export default function Home() {
   const [clockTick, setClockTick] = useState(0);
   const [tvMode, setTvMode] = useState(false);
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-    });
+  
+useEffect(() => {
+  let mounted = true;
 
-    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      setSession(nextSession);
-    });
+  supabase.auth.getSession().then(({ data, error }) => {
+    if (!mounted) return;
 
-    return () => data.subscription.unsubscribe();
-  }, []);
+    if (error) {
+      setMessage(error.message);
+      return;
+    }
+
+    setSession(data.session);
+  });
+
+  const { data: authListener } = supabase.auth.onAuthStateChange(
+    (_event, nextSession) => {
+      if (mounted) {
+        setSession(nextSession);
+      }
+    }
+  );
+
+  return () => {
+    mounted = false;
+    authListener.subscription.unsubscribe();
+  };
+}, []);
 
   const refreshRoom = useCallback(async (code: string) => {
     const { data, error } = await supabase.rpc("showdown_get_room_state", {
